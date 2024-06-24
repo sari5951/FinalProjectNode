@@ -1,0 +1,10 @@
+{
+    "development": {
+      "username": "DESKTOP-ELBS6LU/user",
+      "password": "your_password",
+      "database": "MyDB",
+      "host": "localhost",
+      "dialect": "mssql"
+    }
+  }
+  
