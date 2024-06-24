@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
-
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 // Use body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,7 +21,7 @@ const authMiddleware = require('./middleware/middleware');
 const PORT = process.env.PORT || 3000
 // MongoDB connection URI and database name
 const uri = 'mongodb://localhost:27017'; // Update this URI with your MongoDB connection string
-const dbName = 'MYDB';
+const dbName = 'MYDB-Collection';
 app.use(cors());
 app.use(express.json());
 // app.use(express.urlencoded());
@@ -56,6 +57,50 @@ MongoClient.connect(uri)
     .catch(err => {
         console.error('Failed to connect to the database:', err);
     });
+
+// Swagger configuration
+const swaggerOptions = {
+  definition: {
+      openapi: '3.0.0',
+      info: {
+          title: 'Your API Title',
+          version: '1.0.0',
+          description: 'Description of your API',
+      },
+      servers: [
+          {
+              url: `http://localhost:${PORT}`,
+              description: 'Development server',
+          },
+      ],
+  },
+  apis: ['./routes/*.js'], // Path to your API routes
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Define your routes here (example)
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
