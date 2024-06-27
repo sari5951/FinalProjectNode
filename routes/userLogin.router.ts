@@ -1,7 +1,7 @@
-const express = require('express');
-const { signup, login } = require('../controllers/userLogin.controller');
+import { signup, login } from '../controllers/userLogin.controller';
+import express, { Router, Request, Response } from 'express';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 /**
  * @swagger
@@ -70,4 +70,4 @@ router.post('/signup', signup);
  */
 router.post('/login', login);
 
-module.exports = router;
+export default router;

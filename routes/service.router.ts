@@ -1,9 +1,10 @@
-const express = require('express');
-const { createProduct, updateProduct, deleteProduct } = require('../controllers/service.controller');
+import express, { Router, Request, Response } from 'express';
+
+const router: Router = express.Router();const { createProduct, updateProduct, deleteProduct } = require('../controllers/service.controller');
 const authMiddleware = require('../middleware/authMiddleware.middleware');
 const authorizationMiddleware = require('../middleware/authorizationMiddleware.middleware');
 
-const router = express.Router();
+
 
 /**
  * @swagger

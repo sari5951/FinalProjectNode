@@ -1,7 +1,8 @@
-const authService = require('../services/userLogin.service');
+import { Request, Response } from 'express';
+import * as authService from '../services/userLogin.service';
 
 // פונקציה לרישום משתמש חדש
-exports.signup= async (req, res) => {
+export const signup = async (req: Request, res: Response): Promise<void> => {
   const { username, password, role } = req.body; // שליפת הנתונים מבקשת ה-POST
   console.log('Received data:', req.body); 
 
@@ -12,14 +13,14 @@ exports.signup= async (req, res) => {
   try {
     await authService.createUser(username, password, role); // קריאה לפונקציה בשירות ליצירת משתמש חדש
     res.status(201).json({ message: 'User created' }); // החזרת הודעת הצלחה
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating user:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message }); 
   }
 };
 
 // פונקציה להתחברות משתמש קיים
-exports.login = async (req, res) => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body; 
   console.log('Login data:', req.body); 
 
@@ -29,13 +30,13 @@ exports.login = async (req, res) => {
 
   try {
     const token = await authService.authenticateUser(username, password); 
-console.log(token);
+
     if (token) {
       res.status(200).json({ token });
     } else {
       res.status(401).json({ message: 'Invalid credentials' }); 
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error logging in user:', error); 
     res.status(500).json({ message: 'Internal server error', error: error.message }); 
   }

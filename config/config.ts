@@ -25,7 +25,8 @@
 //     adminUsername: 'sari', // שם המשתמש של המנהל
 //     adminPassword: '1234' // סיסמה של המנהל
 // };
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 require('dotenv').config();
 
 mongoose.connect(process.env.MONGODB_URI, {

@@ -104,9 +104,9 @@
 
 
 //של הפרויקט נוד החדש!
-const Meeting = require('../models/meeting.model');
+import Meeting from '../models/meeting.model';
 
-exports.getMeetings=async() =>{
+export const getMeetings = async (): Promise<any> => {
   try {
     const meetings = await Meeting.find();
     return meetings;
@@ -115,7 +115,7 @@ exports.getMeetings=async() =>{
   }
 };
 
-exports.getMeetingById=async(id) =>{
+export const getMeetingById = async (id: string): Promise<any> => {
   try {
     const meeting = await Meeting.findById(id);
     if (!meeting) {
@@ -127,7 +127,7 @@ exports.getMeetingById=async(id) =>{
   }
 };
 
-exports.createMeeting=async(meetingData)=> {
+export const createMeeting = async (meetingData: any): Promise<any> => {
   try {
     const meeting = new Meeting(meetingData);
     const newMeeting = await meeting.save();
@@ -137,24 +137,19 @@ exports.createMeeting=async(meetingData)=> {
   }
 };
 
-
-const meetingService = require('../services/meeting.service');
-
-exports.updateMeeting = async (req, res) => {
-  const { id } = req.params;
-  const meetingData = req.body; 
-
+export const updateMeeting = async (id: string, meetingData: any): Promise<any> => {
   try {
-    const updatedMeeting = await meetingService.updateMeeting(id, meetingData);
-    res.json(updatedMeeting);
+    const updatedMeeting = await Meeting.findByIdAndUpdate(id, meetingData, { new: true });
+    if (!updatedMeeting) {
+      throw new Error('Meeting not found');
+    }
+    return updatedMeeting;
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    throw new Error(`Failed to update meeting: ${err.message}`);
   }
 };
 
-
-
-exports.deleteMeeting = async (id) => {
+export const deleteMeeting = async (id: string): Promise<any> => {
   try {
     const result = await Meeting.deleteOne({ _id: id });
     if (result.deletedCount === 0) {

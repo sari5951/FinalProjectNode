@@ -1,5 +1,6 @@
-const express = require('express');
-const router = express.Router();
+import express, { Router, Request, Response } from 'express';
+
+const router: Router = express.Router();
 const {
   getMeetings,
   getMeetingById,

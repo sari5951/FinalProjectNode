@@ -1,9 +1,16 @@
-const User = require('../models/userLogin.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import User from '../models/userLogin.model';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { Document } from 'mongoose';
 
-// פונקציה ליצירת משתמש חדש
-exports.createUser = async (username, password, role) => {
+interface UserDocument extends Document {
+  username: string;
+  password: string;
+  role: string;
+  comparePassword(candidatePassword: string): Promise<boolean>;
+}
+
+export const createUser = async (username: string, password: string, role: string): Promise<UserDocument> => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ username, password: hashedPassword, role });
@@ -15,12 +22,11 @@ exports.createUser = async (username, password, role) => {
   }
 };
 
-// פונקציה לאימות משתמש קיים
-exports.authenticateUser = async (username, password) => {
+export const authenticateUser = async (username: string, password: string): Promise<string | false> => {
   try {
     const user = await User.findOne({ username });
     if (!user) {
-      return null;
+      return false;
     }
     const match = await user.comparePassword(password);
     if (match) {
